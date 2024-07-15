@@ -6,7 +6,6 @@ Team Sixteen
 
 - Mehwish Ahmed
 - Eric Liu
-- Annika Manalang
 - Andy Wang
 - Makenzie White
 
