@@ -1,0 +1,44 @@
+---
+title: "Exploratory Data Analysis"
+author: "Andy Wang 305609128"
+date: "2024-07-13"
+output: pdf_document
+---
+
+# Overview
+
+## Files
+
+1. `customer_info_train.csv`, `customer_info_test.csv` - contains customer demographic info
+2. `amazon_order_details_train.csv`, `amazon_order_details_test.csv` - contains each order's specific info
+3. `train.csv`, `test.csv` - primary data file used for modelling
+
+## Imports
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+# File 1: `train.csv`
+
+```{r}
+train_path <- "../ucla-stats-101-c-2024-su-regression/train.csv"
+train <- read.csv(train_path)
+head(train)
+```
+
+```{r}
+train %>% group_by(year) %>% summarize(amt = sum(order_totals))
+```
+
+
+
+
+
+
+
+
+
+
+
