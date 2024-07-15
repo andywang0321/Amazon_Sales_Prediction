@@ -8,15 +8,15 @@ By Andy Wang
 
 Once you have installed the GitHub CLI, you need to get a **Personal Access Token** from GitHub. Personal Access Tokens are like a safer version of the usual username + password combo. We used to be able to do all this using GitHub username + password, but GitHub decided that that is not safe enough so they are now making everyone authenticate using PATs. To get your PAT, go to the top left corner of GitHub and click on your profile picture, then click on `Settings`:
 
-![Panel](user_panel.png)
+![Panel](screenshots/user_panel.png)
 
 Once in Settings, on the left column, click on the last item `Developer Settings`:
 
-![Settings](settings.png)
+![Settings](screenshots/settings.png)
 
 Once in Developer Settings, click on `Personal access tokens` and generate a classic token. **Save that token**. 
 
-![Token](token.png)
+![Token](screenshots/token.png)
 
 You now have a GitHub Personal Access Toekn. You can use it to link your local computer to your GitHub account. To do so, use the following command in the terminal:
 
@@ -32,7 +32,7 @@ A *repository* is just a fancy word for **folder**.
 
 Here is what you see when you open the GitHub repository:
 
-![Repo](repo.png)
+![Repo](screenshots/repo.png)
 
 You can **clone** this repository to your local computer using the terminal.
 Start by navigating to the place where you want to clone the repository, e.g. `Documents/stats_101c`:
@@ -83,7 +83,7 @@ git commit -m "tried a linear regression model"
 
 Notice that it is good practice to always write a concise commit message. This tells your teammates what changes you made and will show up on the GitHub like this:
 
-![Commit Message](commit.png)
+![Commit Message](screenshots/commit.png)
 
 But your changes are not online yet! The last step is to **push** your changes to the remote repo (note the vocabulary used here: you `push` your work to the repo for everyone to see, and you `pull` everyone else's work to stay updated):
 
@@ -99,7 +99,7 @@ In summary, every time you begin working, you should `pull` from the repo to sta
 
 Here's how I uploaded this very file onto GitHub in my terminal:
 
-![Demo](demo.png)
+![Demo](screenshots/demo.png)
 
 Notice how I called `git status` twice. The first time, there were 3 untracked files: `.DS_Store` (MacOS adds these hidden files in the file browser, I don't know what they do), `andys_eda.pdf` (the knitted version of `andys_eda.Rmd`), and `github_info/` (folder containing this file and all the attached screenshots). 
 
@@ -135,8 +135,8 @@ Documents
 
 Git is a **Version Controll System**, its purpose is to **keep track of changes in your work**. GitHub, on the other hand, is an online file sharing portal that uses Git.
 
-Learning to use Git and GitHub is crucial for career success, since it is the industry standard for teamwork not just in tech companies. This is because although Google Drive or iCloud or DropBox is easy to use, it gets REALLY MESSY when there are more people on the team. We often end up with *proposal.pdf*, *proposal-1.pdf*, *proposal-2.pdf* ... and a lot of duplicate files or files with minor differences with no idea of who uploaded which one. Older versions of files might by permanantly lost or extremely difficult to retrieve. 
+Learning to use Git and GitHub is crucial for career success, since it is the industry standard for teamwork not just in tech companies. This is because although Google Drive or iCloud or DropBox is easy to use, it gets REALLY MESSY when there are more people on the team. We often end up with *proposal.pdf*, *proposal-1.pdf*, *proposal-2.pdf* ... and a lot of duplicate files or files with minor differences with no idea of who uploaded which one. Older versions of files might be permanantly lost or extremely difficult to retrieve. 
 
-Git is a powerful system that, when used correctly, streamlines the teamworking experience and enables very organized version control. Prof. Miles Chen first taught me how to use Git and GitHub in Stats 21, and it is one of the most important skills I've learned from UCLA.
+Git is a powerful system that, when used correctly, streamlines the teamworking experience and enables very organized version control. Prof. Miles Chen first taught me how to use Git and GitHub in Stats 21, and it is one of the most useful skills I've learned at UCLA.
 
 To learn more about Git and GitHub, I recommend watching video tutorials on YouTube or taking a course on DataCamp while we still have Premium privileges!
