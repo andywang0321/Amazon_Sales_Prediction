@@ -95,6 +95,22 @@ If nothing went wrong, your changes should now be uploaded to GitHub. Everyone s
 
 In summary, every time you begin working, you should `pull` from the repo to stay updated, and whenever you make changes, you need to go through the `add`-`commit`-`push` procedure to publish your work.
 
+## Demo
+
+Here's how I uploaded this very file onto GitHub in my terminal:
+
+![Demo](demo.png)
+
+Notice how I called `git status` twice. The first time, there were 3 untracked files: `.DS_Store` (MacOS adds these hidden files in the file browser, I don't know what they do), `andys_eda.pdf` (the knitted version of `andys_eda.Rmd`), and `github_info/` (folder containing this file and all the attached screenshots). 
+
+After calling `git add github_info`, I call `git status` again. This time, 6 files are added to the staging area: this file and all attached screenshots. Note that `.DS_Store` and `andys_eda.pdf` are still untracked because I didn't explicitly add them. 
+
+Next, I called `git commit -m "a guide to github"` to commit the 6 files I added.
+
+Finally, when I am happy with all the changes I've made, I called `git push` to upload the 6 files onto GitHub.
+
+After writing this section, I am going to repeat this process (currently the version on GitHub does not have this Demo section, since I am writing it up right now).
+
 ## Where to keep data
 
 I recommend **NOT SAVING THE DATASETS IN THE REPO**. GitHub has a filesize limit for each file, so it is good practice to save your datasets (which could be many gigabytes) in a folder outside of the repository folder, something like this:
