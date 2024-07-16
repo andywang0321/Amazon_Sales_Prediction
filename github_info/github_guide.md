@@ -131,6 +131,18 @@ Documents
       |--...
 ```
 
+## Git Ignore
+
+Suppose you have many files you want to add and you didn't want to manually add each one. You can use the `.` shorthand that means "everything", as follows:
+
+```
+git add .
+```
+
+This would add every new/modified/deleted/renamed file to the staging area. There is one problem, though, and that is you'll probably also have added unwanted files (e.g. MacOS's `.DS_Store` metadata file or the earlier `scratch_work.R`). In fact, you probably never want to add these files ever. What you can do in this case is use write a `.gitignore` file to your repo that lists all the files you **DON'T** want git to keep track of. Eric Chu on CampusWire has kindly provided the `.gitignore` file he uses for stats classes, which I have attached as `sample_gitignore.txt`. Check it out!
+
+Note that files whose names begin with a `.` are called "hidden files", and usually will not show up in most OS's file explorer app (unless you enable it in the settings).
+
 ## Miscellaneous
 
 Git is a **Version Controll System**, its purpose is to **keep track of changes in your work**. GitHub, on the other hand, is an online file sharing portal that uses Git.
