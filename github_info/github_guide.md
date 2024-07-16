@@ -2,9 +2,17 @@
 
 By Andy Wang
 
+> Git is a **Version Controll System**, its purpose is to **keep track of changes in your work**. GitHub, on the other hand, is an online file sharing portal that uses Git.
+
+Learning to use Git and GitHub is crucial for career success, since it is the industry standard for teamwork not just in tech companies. This is because although Google Drive or iCloud or DropBox is easy to use, it gets REALLY MESSY when there are more people on the team. We often end up with *proposal.pdf*, *proposal-1.pdf*, *proposal-2.pdf* ... and a lot of duplicate files or files with minor differences with no idea of who uploaded which one. Older versions of files might be permanantly lost or extremely difficult to retrieve. 
+
 ## Authenticating GitHub CLI
 
-**Git and GitHub are two different things.** While you can make changes to the repo on your local machine using Git, you cannot publish these changes to the GitHub repository unless you login. To do this, you should install the GitHub CLI (Command Line Interface). Go to https://github.com/cli/cli and scroll down to the **Installation** section, find your computer's OS and follow the instructions.
+### Install GitHub CLI on your computer
+
+**Git and GitHub are two different things.** While you can make changes to the repo on your local machine using Git, you cannot publish these changes to the GitHub repository unless you login. To do this, you should **install the GitHub CLI** (Command Line Interface). Go to https://github.com/cli/cli and scroll down to the **Installation** section, find your computer's OS and follow the instructions.
+
+### Generate Personal Access Token to access GitHub through your computer
 
 Once you have installed the GitHub CLI, you need to get a **Personal Access Token** from GitHub. Personal Access Tokens are like a safer version of the usual username + password combo. We used to be able to do all this using GitHub username + password, but GitHub decided that that is not safe enough so they are now making everyone authenticate using PATs. To get your PAT, go to the top left corner of GitHub and click on your profile picture, then click on `Settings`:
 
@@ -18,7 +26,9 @@ Once in Developer Settings, click on `Personal access tokens` and generate a cla
 
 ![Token](screenshots/token.png)
 
-You now have a GitHub Personal Access Toekn. You can use it to link your local computer to your GitHub account. To do so, use the following command in the terminal:
+### Logging into your GitHub through the GitHub CLI
+
+You now have a GitHub Personal Access Token. You can use it to link your local computer to your GitHub account. To do so, use the following command in the terminal:
 
 ```
 gh auth login
@@ -143,11 +153,7 @@ This would add every new/modified/deleted/renamed file to the staging area. Ther
 
 Note that files whose names begin with a `.` are called "hidden files", and usually will not show up in most OS's file explorer app (unless you enable it in the settings).
 
-## Miscellaneous
-
-Git is a **Version Controll System**, its purpose is to **keep track of changes in your work**. GitHub, on the other hand, is an online file sharing portal that uses Git.
-
-Learning to use Git and GitHub is crucial for career success, since it is the industry standard for teamwork not just in tech companies. This is because although Google Drive or iCloud or DropBox is easy to use, it gets REALLY MESSY when there are more people on the team. We often end up with *proposal.pdf*, *proposal-1.pdf*, *proposal-2.pdf* ... and a lot of duplicate files or files with minor differences with no idea of who uploaded which one. Older versions of files might be permanantly lost or extremely difficult to retrieve. 
+## Conclusion
 
 Git is a powerful system that, when used correctly, streamlines the teamworking experience and enables very organized version control. Prof. Miles Chen first taught me how to use Git and GitHub in Stats 21, and it is one of the most useful skills I've learned at UCLA.
 
