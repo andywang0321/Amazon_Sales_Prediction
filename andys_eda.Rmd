@@ -18,6 +18,9 @@ output: pdf_document
 ```{r}
 library(dplyr)
 library(ggplot2)
+library(tidymodels)
+library(reshape2)
+library(lubridate)
 ```
 
 # File 1: `train.csv`
@@ -25,18 +28,241 @@ library(ggplot2)
 ```{r}
 train_path <- "../ucla-stats-101-c-2024-su-regression/train.csv"
 train <- read.csv(train_path)
+#train <- train %>% select(-order_totals)
 head(train)
 ```
 
+## Variables
+
+index variables
+- `q_demos_state`   - US state where orders were placed
+- `year`            - year where orders were placed
+- `month`           - month where orders were placed
+
+user info
+- `count`           - total number of orders placed
+- `count_female`    - number of orders placed by those who responded female to survey question
+- `count_male`      - number of orders placed by those who responded male to survey question
+- `count_less5`     - number of orders placed by those who responded "place less than 5 orders per month on Amazon"
+- `count_5to10`     - "5 to 10 orders per month on Amazon"
+- `count_over10`    - "over 10 orders per month on Amazon"
+
+household size variables
+- `count_hh1`       - household size = 1
+- `count_hh2`       - household size = 2
+- `count_hh3`       - household size = 3
+- `count_hh4`       - household size = 4+
+
+account sharing variables
+- `count_howmany1`  - how many people in the household use/share the amazon account = 1
+- `count_howmany2`  - how many people in the household use/share the amazon account = 2
+- `count_howmany3`  - how many people in the household use/share the amazon account = 3
+- `count_howmany4`  - how many people in the household use/share the amazon account = 4
+
+customer age variables
+- `count_1824`      - age 18-24
+- `count_2534`      
+- `count_3544`            
+- `count_4554`            
+- `count_5564`            
+- `count_65up`            
+
+customer income variables
+- `count_und25k`    - under 25k
+- `count_2549k`     - 25k to 49k
+- `count_5074k`           
+- `count_7599k`           
+- `count_100149k`   - 100k to 149k
+- `count_150kup`    - over 150k
+
+customer education variables
+- `count_lessHS`    - less than HS
+- `count_HS`        - HS diploma
+- `count_B`         - Bachelor's degree
+- `count_G`         - graduate / professional degree
+
+target variable
+- `order_totals`    - total order price
+- `log_total`       - log of total order price
+
+## Correlation Matrix
+
 ```{r}
-train %>% group_by(year) %>% summarize(amt = sum(order_totals))
+correlation_mat <- train %>% 
+  select(-order_totals) %>% 
+  select_if(is.numeric) %>% 
+  cor()
+
+melted_cormat <- melt(correlation_mat)
+
+# Get upper triangle of the correlation matrix
+get_upper_tri <- function(cormat){
+  cormat[lower.tri(cormat)]<- NA
+  return(cormat)
+}
+
+# Use correlation between variables as distance
+reorder_cormat <- function(cormat){
+  dd <- as.dist((1-cormat)/2)
+  hc <- hclust(dd)
+  cormat <-cormat[hc$order, hc$order]
+}
+
+# Reorder the correlation matrix
+cormat <- reorder_cormat(correlation_mat)
+upper_tri <- get_upper_tri(cormat)
+
+# Melt the correlation matrix
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+# Create a heatmap
+ggplot(melted_cormat, aes(Var2, Var1, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(
+    low = "blue", 
+    high = "red", 
+    mid = "white", 
+    midpoint = 0, 
+    limit = c(-1, 1), 
+    space = "Lab", 
+    name = "Pearson\nCorrelation"
+  ) +
+  theme_minimal() + # minimal theme
+  theme(
+    axis.text.x = element_text(angle = 90, size = 9)
+  ) +
+  coord_fixed()
 ```
 
+## Distribution Plots
 
+```{r}
+# Distribution Plots
+# Histogram of log_total
+ggplot(train, aes(x = log_total)) +
+  geom_histogram(bins = 30, fill = "blue", alpha = 0.7) +
+  theme_minimal() +
+  labs(title = "Distribution of log_total", x = "log_total", y = "Count")
+```
 
+## Time Series Plots
 
+```{r}
+# Time Series Plots
+# Line Plot of log_total over time
+timeseries <- train %>%
+  group_by(year, month) %>% 
+  summarise(log_total = sum(log_total), count = sum(count)) %>% 
+  mutate(date = ymd(paste(year, month, "01", sep = "-"))) %>% 
+  select(date, log_total, count) %>% 
+  ungroup()
 
+ggplot(timeseries, aes(x = date, y = log_total)) +
+  geom_line(color = "blue") +
+  theme_minimal() +
+  labs(title = "log_total Over Time", x = "Date", y = "log_total")
 
+# Line Plot of count over time
+ggplot(timeseries, aes(x = date, y = count)) +
+  geom_line(color = "green") +
+  theme_minimal() +
+  labs(title = "Total Orders Over Time", x = "Date", y = "Count")
+```
+
+## Geographical Plots
+
+```{r}
+# Geographical Plots
+# Assuming you have a state map dataset named `us_states` with state abbreviations
+us_states <- map_data("state")
+
+states <- train %>%
+  mutate(q_demos_state = tolower(q_demos_state)) %>% 
+  group_by(q_demos_state) %>%
+  summarize(avg_total = mean(order_totals)) %>% 
+  select(q_demos_state, avg_total) %>% 
+  ungroup()
+
+# Merge the state data
+states <- us_states %>%
+  left_join(states, by = c("region" = "q_demos_state"))
+
+ggplot(states, aes(map_id = region, fill = avg_total)) +
+  geom_map(map = us_states, color = "white") +
+  expand_limits(x = us_states$long, y = us_states$lat) +
+  theme_minimal() +
+  labs(title = "Average order_total by State", fill = "Avg order_totals")
+```
+
+## Scatter Plots
+
+```{r}
+# Scatter Plots
+# Scatter plot of log_total vs count_male
+ggplot(train, aes(x = count_male, y = log_total)) +
+  geom_point(alpha = 0.5) +
+  theme_minimal() +
+  labs(title = "log_total vs Count of Male Orders", x = "Count of Male Orders", y = "log_total")
+
+# Scatter plot of log_total vs count_female
+ggplot(train, aes(x = count_female, y = log_total)) +
+  geom_point(alpha = 0.5) +
+  theme_minimal() +
+  labs(title = "log_total vs Count of Female Orders", x = "Count of Female Orders", y = "log_total")
+
+# Pair Plot
+# Using GGally package for a pair plot
+library(GGally)
+ggpairs(train %>% select(log_total, count_female, count_male, count_1824, count_und25k))
+```
+
+## Bar Plots TODO: FIX THIS
+
+```{r}
+# Bar Plots
+# Bar Plot of average order_totals by age group
+age_vars <- c("count_1824", "count_2534", "count_3544", "count_4554", "count_5564", "count_65up")
+ages <- train %>%
+  select(q_demos_state, year, month, order_totals, all_of(age_vars)) %>%
+  pivot_longer(cols = age_vars, names_to = "age_group", values_to = "count")
+
+ages <- ages %>%
+  group_by(age_group) %>%
+  summarize(avg_total = mean(order_totals))
+
+ggplot(ages, aes(x = age_group, y = avg_total, fill = age_group)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(title = "Average order_totals by Age Group", x = "Age Group", y = "Avg order_totals")
+```
+
+## Box Plots
+
+```{r}
+# Box Plots
+# Box Plot of log_total by state
+# Calculate the median log_total for each state
+state_medians <- train %>%
+  group_by(q_demos_state) %>%
+  summarize(median_log_total = median(log_total)) %>%
+  arrange(median_log_total)
+
+# Reorder the levels of q_demos_state based on the median log_total
+state_medians <- train %>%
+  mutate(q_demos_state = factor(q_demos_state, levels = state_medians$q_demos_state))
+
+# Box Plot of log_total by state with sorted states
+ggplot(state_medians, aes(x = log_total, y = q_demos_state)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Box Plot of log_total by State", y = "State", x = "log_total")
+
+# Box Plot of log_total by month
+ggplot(train, aes(x = factor(month), y = log_total)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Box Plot of log_total by Month", x = "Month", y = "log_total")
+```
 
 
 
