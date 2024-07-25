@@ -125,6 +125,8 @@ rf_final_fit %>%
   mutate(mse = .estimate^2, rmse = .estimate) %>% 
   select(mse, rmse)
 
+# mse: 0.0140
+
 # ====================
 # Linear Regression
 # ====================
@@ -171,6 +173,8 @@ lm_final_fit %>%
   filter(.metric == "rmse") %>% 
   mutate(mse = .estimate^2, rmse = .estimate) %>% 
   select(mse, rmse)
+
+# mse: 0.0814
 
 # ====================
 # Multi-Layer Perceptron
@@ -221,6 +225,8 @@ nn_final_fit %>%
   filter(.metric == "rmse") %>% 
   mutate(mse = .estimate^2, rmse = .estimate) %>% 
   select(mse, rmse)
+
+# mse: 0.103
 
 # ====================
 # Gradient-Boosting Trees
@@ -274,57 +280,57 @@ xgb_final_fit %>%
   mutate(mse = .estimate^2, rmse = .estimate) %>% 
   select(mse, rmse)
 
+# mse: 0.0142
+
 # ====================
 # Multivariate Adaptive Regression Splines
 # ====================
 
-xgb_model <- boost_tree(
-  trees = tune(),
-  min_n = tune(),
-  tree_depth = tune(),
-  learn_rate = tune(),
-  loss_reduction = tune(),
-  sample_size = tune(),
-  stop_iter = tune()
+mars_model <- mars(
+  num_terms = tune(),
+  prod_degree = tune(),
+  prune_method = tune()
 ) %>% 
-  set_engine('xgboost') %>% 
+  set_engine('earth') %>% 
   set_mode('regression')
 
-xgb_wkfl <- workflow() %>% 
-  add_model(xgb_model) %>% 
+mars_wkfl <- workflow() %>% 
+  add_model(mars_model) %>% 
   add_recipe(recipe_2)
 
-xgb_grid <- grid_random(
-  parameters(xgb_model),
+mars_grid <- grid_random(
+  parameters(mars_model),
   size = 10
 )
 
-xgb_tune <- xgb_wkfl %>% 
+mars_tune <- mars_wkfl %>% 
   tune_grid(
     resamples = train_folds,
-    grid = xgb_grid
+    grid = mars_grid
   )
 
-xgb_tune %>% 
+mars_tune %>% 
   collect_metrics() %>%
   filter(.metric == "rmse") %>% 
   mutate(mse = mean^2, rmse = mean) %>% 
-  select(trees, min_n, tree_depth, learn_rate, loss_reduction, sample_size, stop_iter, mse, rmse)
+  select(num_terms, prod_degree, prune_method, mse, rmse)
 
-best_xgb_model <- xgb_tune %>% 
+best_mars_model <- mars_tune %>% 
   select_best(metric = 'rmse')
 
-final_xgb_wkfl <- xgb_wkfl %>% 
-  finalize_workflow(best_xgb_model)
+final_mars_wkfl <- mars_wkfl %>% 
+  finalize_workflow(best_mars_model)
 
-xgb_final_fit <- final_xgb_wkfl %>% 
+mars_final_fit <- final_mars_wkfl %>% 
   last_fit(split = train_split)
 
-xgb_final_fit %>% 
+mars_final_fit %>% 
   collect_metrics() %>%
   filter(.metric == "rmse") %>% 
   mutate(mse = .estimate^2, rmse = .estimate) %>% 
   select(mse, rmse)
+
+# mse: 0.0160
 
 # ====================
 # Test Data
@@ -336,7 +342,7 @@ TEST_FINAL <- read.csv(test_path)
 predictions <- TEST_FINAL %>% 
   select(id) %>% 
   bind_cols(
-    xgb_final_fit %>% 
+    mars_final_fit %>% 
       extract_workflow() %>% 
       predict(new_data = TEST_FINAL)
   ) %>% 
