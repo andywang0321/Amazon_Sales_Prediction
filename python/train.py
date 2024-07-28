@@ -3,7 +3,6 @@ import torch.nn as nn
 import torch.nn.utils
 
 from model import *
-from dataset import *
 
 device = torch.device(
     "cuda" if torch.cuda.is_available() else
@@ -50,10 +49,12 @@ def solver(
         eval_dataloader,
         lr: float = 1e-3,
         epochs: int = 5,
+        verbose: bool = True,
         print_every: int = 500
 ) -> tuple[list[float], list[float]]:
 
-    print(f'Training {type(model).__name__} on {device}...')
+    if verbose:
+        print(f'Training {type(model).__name__} on {device}...')
 
     model.to(device)
     loss_fn = nn.MSELoss().to(device)
@@ -72,7 +73,7 @@ def solver(
             eval_loss_history.append(eval_loss)
             train_loss_history.append(train_loss)
             # printing
-            if step % print_every == 0:
+            if verbose and (step % print_every == 0):
                 print(
                     f'Epoch: {epoch+1}/{epochs},',
                     f'Step: {step+1}/{len_train_dataloader},',
