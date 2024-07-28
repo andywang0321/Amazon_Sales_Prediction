@@ -8,7 +8,7 @@ UCLA Stats 101C Summer 2024
 - Andy Wang
 - Makenzie White
 
-# Regression Project - Amazon Order Prediction
+## Regression Project - Amazon Order Prediction
 
 Competition website: https://www.kaggle.com/competitions/ucla-stats-101-c-2024-su-regression/overview
 
@@ -23,4 +23,4 @@ Approaches:
 
 Best model: 2-Layer Fully-Connected-Net (13501 parameters, dropout = 0.5)
 
-# Classification Project - 
+## Classification Project - 
