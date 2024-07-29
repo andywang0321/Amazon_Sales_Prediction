@@ -9,19 +9,6 @@ date: "Stats 101C Summer 2024 - Team 16 Regression Project Report"
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(dplyr)
-library(ggplot2)
-library(tidymodels)
-library(reshape2)
-library(lubridate)
-library(DiagrammeR)
-
-train_path <- "../../ucla-stats-101-c-2024-su-regression/train.csv"
-train <- read.csv(train_path)
-```
-
 # Introduction
 
 In this report, we detail how we scored first place in the Amazon total sales prediction competition, achieving a score of 0.01182 on the Private Leaderboard, surpassing the second place solution (score = 0.01560) by 24%, and the baseline solution (score = 0.01656) by 29%.
