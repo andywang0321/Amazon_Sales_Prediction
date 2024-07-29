@@ -15,7 +15,7 @@ Instead of modelling `train.csv`, we could get finer-grained price predictions o
 
 # Installation
 
-In your terminal, create a new `conda` environment called 'env_name' by running:
+In your terminal, create a new `conda` environment (replace `env_name` by desired name) by running:
 
 ```sh
 conda create --name env_name --file requirements.txt
