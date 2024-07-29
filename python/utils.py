@@ -57,7 +57,7 @@ def mc_aggregate(
 
     return(orders)
 
-class TrainDotCsv(Dataset):
+class CustomDataset(Dataset):
     def __init__(self, X: np.ndarray, y: np.ndarray) -> None:
         self.X = torch.from_numpy(X)
         self.y = torch.from_numpy(y)
@@ -205,6 +205,8 @@ def get_submission_preds(
     )
 
     out['id'] = test_ids
+
+    out = out.fillna(out.log_total.mean())
 
     if save_path is not None:
         out[['id', 'log_total']].to_csv(
