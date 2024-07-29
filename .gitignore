@@ -1,5 +1,9 @@
 # All credit goes to Eric Chu, who shared this fantastic .gitignore file on CampusWire.
 
+# ========= #
+#  R Files  #
+# ========= #
+
 # History files
 .Rhistory
 .Rapp.history
@@ -49,6 +53,12 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# ============== #
+#  Python Files  #
+# ============== #
+
+__pycache__/
 
 # Custom stuff
 .ipynb_checkpoints
