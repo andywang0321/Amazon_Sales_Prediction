@@ -1,13 +1,12 @@
----
-title: "Fine-Grained Data is All You Need"
-author: 
-  - Mehwish Ahmed^[UID 206230051, email `mfa13@ucla.edu`]
-  - Eric Liu^[UID 705531142, email `ericliu3782@ucla.edu`]
-  - Andy Wang^[UID 305609128, email `andywang0321@g.ucla.edu`]
-  - Makenzie White^[UID 106043738, email `whitem0916@g.ucla.edu`]
-date: "Stats 101C Summer 2024 - Team 16 Regression Project Report"
-output: pdf_document
----
+
+# Fine-Grained Data is All You Need
+
+### Stats 101C Summer 2024 - Team 16 Regression Project Report
+
+  - Mehwish Ahmed
+  - Eric Liu
+  - Andy Wang
+  - Makenzie White
 
 Competition website: https://www.kaggle.com/competitions/ucla-stats-101-c-2024-su-regression/overview
 
